@@ -7,8 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import android.content.ContentValues;
-import android.content.Context;
+import android.content.*;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -16,6 +15,8 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.RemoteException;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ public class PlaceViewAdapter extends CursorAdapter {
 	private static LayoutInflater inflater = null;
 	private Context mContext;
 	private String mBitmapStoragePath;
+    private static String TAG = "Lab-ContentProvider";
 
 	public PlaceViewAdapter(Context context, Cursor cursor, int flags) {
 		super(context, cursor, flags);
@@ -60,28 +62,31 @@ public class PlaceViewAdapter extends CursorAdapter {
 	}
 
 	@Override
-	public Cursor swapCursor(Cursor newCursor) {
-		super.swapCursor(newCursor);
+    public Cursor swapCursor(Cursor newCursor) {
+        super.swapCursor(newCursor);
 
-		if (null != newCursor) {
+        if (null != newCursor) {
 
-        // TODO - clear the ArrayList list so it contains
-		// the current set of PlaceRecords. Use the 
-		// getPlaceRecordFromCursor() method to add the
-		// current place to the list
-		
+            // - clear the ArrayList list so it contains
+            // the current set of PlaceRecords. Use the
+            // getPlaceRecordFromCursor() method to add the
+            // current place to the list
+            list.clear();
 
-            
-            
-            
-            
-            
+            if(newCursor.moveToFirst())
+            {
+                do {
+                    PlaceRecord pr = getPlaceRecordFromCursor(newCursor);
+                    add(pr);
+                } while (newCursor.moveToNext());
+            }
+
             // Set the NotificationURI for the new cursor
-			newCursor.setNotificationUri(mContext.getContentResolver(),
-					PlaceBadgesContract.CONTENT_URI);
+            newCursor.setNotificationUri(mContext.getContentResolver(),
+                    PlaceBadgesContract.CONTENT_URI);
 
-		}
-		return newCursor;
+        }
+        return newCursor;
 
 	}
 
@@ -145,12 +150,29 @@ public class PlaceViewAdapter extends CursorAdapter {
 			listItem.setFlagBitmapPath(filePath);
 			list.add(listItem);
 
-			// TODO - Insert new record into the ContentProvider
+			// - Insert new record into the ContentProvider
 
-			
+            ContentResolver contentResolver = mContext.getContentResolver();
+            ArrayList<ContentProviderOperation> batchOperation = new ArrayList<ContentProviderOperation>();
+            batchOperation.add(ContentProviderOperation.newInsert(PlaceBadgesContract.CONTENT_URI)
+                    .withValue(PlaceBadgesContract.COUNTRY_NAME, listItem.getCountryName())
+                    .withValue(PlaceBadgesContract.PLACE_NAME, listItem.getPlace())
+                    .withValue(PlaceBadgesContract.LAT, listItem.getLat())
+                    .withValue(PlaceBadgesContract.LON, listItem.getLon())
+                    .build()
+            );
 
-		
-        
+            try {
+
+                // Apply all batched operations
+                contentResolver.applyBatch(PlaceBadgesContract.AUTHORITY,
+                        batchOperation);
+
+            } catch (RemoteException e) {
+                Log.i(TAG, "RemoteException");
+            } catch (OperationApplicationException e) {
+                Log.i(TAG, "RemoteException");
+            }
         
         
         }
@@ -165,12 +187,9 @@ public class PlaceViewAdapter extends CursorAdapter {
 
 		list.clear();
 
-		// TODO - delete all records in the ContentProvider
-
-
-        
-        
-        
+		// - delete all records in the ContentProvider
+        ContentResolver contentResolver = mContext.getContentResolver();
+        contentResolver.delete(PlaceBadgesContract.CONTENT_URI, null, null);
 	}
 
 	@Override
