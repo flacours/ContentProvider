@@ -230,7 +230,8 @@ public class PlaceViewAdapter extends CursorAdapter {
 
 	private boolean storeBitmapToFile(Bitmap bitmap, String filePath) {
 
-		if (Environment.getExternalStorageState().equals(
+        String state = Environment.getExternalStorageState();
+		if (state.equals(
 				Environment.MEDIA_MOUNTED)) {
 
 			try {
