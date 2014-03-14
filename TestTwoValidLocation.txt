@@ -1,0 +1,9 @@
+03-14 12:15:32.029    2288-2288/? I/Lab-ContentProvider? Entered onCreateLoader()
+03-14 12:15:41.069    2288-2288/? I/Lab-ContentProvider? Entered footerView.OnClickListener.onClick()
+03-14 12:15:41.189    2288-2288/? I/Lab-ContentProvider? Starting Place Download
+03-14 12:15:41.539    2288-2288/? I/Lab-ContentProvider? Entered addNewPlace()
+03-14 12:15:46.350    2288-2288/? I/Lab-ContentProvider? Entered footerView.OnClickListener.onClick()
+03-14 12:15:46.470    2288-2288/? I/Lab-ContentProvider? Starting Place Download
+03-14 12:15:46.900    2288-2288/? I/Lab-ContentProvider? Entered addNewPlace()
+03-14 12:15:52.390    2288-2288/? I/Lab-ContentProvider? Place: The Greenhouse Country: United States
+03-14 12:15:52.510    2288-2288/? I/Lab-ContentProvider? Place: Berwyn Country: United States

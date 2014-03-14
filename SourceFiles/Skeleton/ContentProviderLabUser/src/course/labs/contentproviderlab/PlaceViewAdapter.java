@@ -77,7 +77,7 @@ public class PlaceViewAdapter extends CursorAdapter {
             {
                 do {
                     PlaceRecord pr = getPlaceRecordFromCursor(newCursor);
-                    add(pr);
+                    list.add(pr);
                 } while (newCursor.moveToNext());
             }
 
@@ -159,6 +159,7 @@ public class PlaceViewAdapter extends CursorAdapter {
                     .withValue(PlaceBadgesContract.PLACE_NAME, listItem.getPlace())
                     .withValue(PlaceBadgesContract.LAT, listItem.getLat())
                     .withValue(PlaceBadgesContract.LON, listItem.getLon())
+                    .withValue(PlaceBadgesContract.FLAG_BITMAP_PATH, listItem.getFlagBitmapPath())
                     .build()
             );
 

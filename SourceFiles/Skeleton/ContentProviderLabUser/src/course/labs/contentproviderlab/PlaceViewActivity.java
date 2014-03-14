@@ -70,7 +70,6 @@ public class PlaceViewActivity extends ListActivity implements
         //
         // - add a footerView to the ListView
         // You can use footer_view.xml to define the footer
-
         View view = getLayoutInflater().inflate(R.layout.footer_view, null);
         mFooterView = (TextView)view.findViewById(R.id.footer);
         getListView().addFooterView(mFooterView, null, true);
@@ -97,7 +96,6 @@ public class PlaceViewActivity extends ListActivity implements
             }
 
         });
-        setListAdapter(mCursorAdapter);
 
 
         // - When the footerView's onClick() method is called, it must issue the
@@ -127,10 +125,11 @@ public class PlaceViewActivity extends ListActivity implements
         // ListView's adapter should be a PlaceViewAdapter called mCursorAdapter
 
 
-        mCursorAdapter = new PlaceViewAdapter(this, null, 0);
-		
+
 		
 		// - Initialize a CursorLoader
+        mCursorAdapter = new PlaceViewAdapter(this, null, 0);
+
 
         setListAdapter(mCursorAdapter);
 
